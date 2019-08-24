@@ -1,11 +1,10 @@
 # ulauncher-todoist-ext
 
+> Manage Todoist from Ulauncher.
 
-> Manage your Docker containers from Ulauncher
+## Screenshot
 
-## Demo
-
-![Demo](demo.gif)
+![Screenshot](doc/menu.png)
 
 ## Features
 
