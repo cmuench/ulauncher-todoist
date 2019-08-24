@@ -20,7 +20,7 @@ unlink: ## Unlink extension from Ulauncher
 	@rm -r ~/.cache/ulauncher_cache/extensions/${EXT_NAME}
 
 deps: ## Install Python Dependencies
-	@pip3 install -r requirements.txt
+	@sudo pip3 install -r requirements.txt
 
 dev: ## Runs ulauncher on development mode
 	ulauncher --no-extensions --dev -v
