@@ -30,6 +30,10 @@ Open ulauncher preferences window -> extensions -> add extension and paste the f
 https://github.com/cmuench/ulauncher-todoist-ext
 ```
 
+Set api token in configuration tab "extensions -> Todoist -> API Token".
+You can find your API Token here: [https://todoist.com/prefs/integrations](https://todoist.com/prefs/integrations)
+
+
 ## Usage
 
 On Ulauncher, use "todo" as the default keyword to trigger the extension. By default it will show a list of running containers.
