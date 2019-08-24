@@ -1,0 +1,24 @@
+{
+  "required_api_version": "^2.0.0",
+  "name": "Todoist",
+  "description": "Manage Todoist tasks",
+  "developer_name": "Christian Münch",
+  "icon": "images/icon.png",
+  "options": {
+    "query_debounce": 0.05
+  },
+  "preferences": [
+    {
+      "id": "todoist_kw",
+      "type": "keyword",
+      "name": "Todoist",
+      "default_value": "todo"
+    },
+    {
+      "id": "todoist_api_token",
+      "type": "input",
+      "name": "API Token",
+      "default_value": ""
+    }
+  ]
+}
