@@ -34,7 +34,7 @@ class TodoistExtension(Extension):
     def create_task(self, message):
         api_token = self.preferences['todoist_api_token']
         api = todoist.TodoistAPI(api_token)
-        new_item = api.add_item(message)
+        new_item = api.quick.add(message)
         api.commit()
         self.show_notification('Task %i created' % new_item["id"], make_sound=True)
 
