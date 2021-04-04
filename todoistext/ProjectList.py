@@ -1,8 +1,8 @@
+import logging
+import unicodedata
 from datetime import datetime
 
 import todoist
-import logging
-import unicodedata
 from ulauncher.api.shared.action.OpenUrlAction import OpenUrlAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
@@ -15,7 +15,7 @@ class ProjectList(object):
         self.extension = extension
 
     def get_list(self):
-        api_token = self.extension.preferences['todoist_api_token']
+        api_token = self.extension.api_token
         api = todoist.TodoistAPI(api_token)
         api.sync()
 

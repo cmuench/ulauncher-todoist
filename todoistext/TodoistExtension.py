@@ -1,10 +1,13 @@
+import logging
 import os
 import subprocess
+
 import gi
-import logging
 import todoist
-from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
-from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
+from ulauncher.api.shared.action.ExtensionCustomAction import \
+    ExtensionCustomAction
+from ulauncher.api.shared.action.RenderResultListAction import \
+    RenderResultListAction
 from ulauncher.api.shared.action.SetUserQueryAction import SetUserQueryAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
@@ -12,12 +15,15 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('Notify', '0.7')
 
 from gi.repository import Notify
-
 from ulauncher.api.client.Extension import Extension
-from ulauncher.api.shared.event import KeywordQueryEvent, ItemEnterEvent
+from ulauncher.api.shared.event import (ItemEnterEvent, KeywordQueryEvent,
+                                        PreferencesEvent,
+                                        PreferencesUpdateEvent)
+
 from .ItemEnterEventListener import ItemEnterEventListener
 from .KeywordQueryEventListener import KeywordQueryEventListener
-
+from .PreferencesEventListener import (PreferencesEventListener,
+                                       PreferencesUpdateEventListener)
 
 logger = logging.getLogger(__name__)
 
@@ -25,15 +31,19 @@ class TodoistExtension(Extension):
     SOUND_FILE = "/usr/share/sounds/freedesktop/stereo/message.oga"
     ICON_FILE = 'images/icon.png'
 
+    keyword = None
+    api_token = None
+
     def __init__(self):
         super(TodoistExtension, self).__init__()
         self.icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), self.ICON_FILE)
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener(self.ICON_FILE))
         self.subscribe(ItemEnterEvent, ItemEnterEventListener(self.ICON_FILE))
+        self.subscribe(PreferencesEvent, PreferencesEventListener())
+        self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
 
     def create_task(self, message):
-        api_token = self.preferences['todoist_api_token']
-        api = todoist.TodoistAPI(api_token)
+        api = todoist.TodoistAPI(self.api_token)
         new_item = api.quick.add(message)
         api.commit()
         self.show_notification('Task %i created' % new_item["id"], make_sound=True)
@@ -55,7 +65,7 @@ class TodoistExtension(Extension):
             subprocess.call(("paplay", self.SOUND_FILE))
 
     def show_menu(self):
-        keyword = self.preferences["todoist_kw"]
+        keyword = self.keyword
 
         items = []
 

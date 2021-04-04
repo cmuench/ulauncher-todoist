@@ -1,7 +1,7 @@
+import logging
 from datetime import datetime
 
 import todoist
-import logging
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
@@ -14,7 +14,7 @@ class TodayTaskList(object):
         self.extension = extension
 
     def get_list(self):
-        api_token = self.extension.preferences['todoist_api_token']
+        api_token = self.extension.api_token
         api = todoist.TodoistAPI(api_token)
         api.sync()
 
