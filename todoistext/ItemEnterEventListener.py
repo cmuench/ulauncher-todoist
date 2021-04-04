@@ -1,7 +1,9 @@
 import logging
+
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.action.DoNothingAction import DoNothingAction
-from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
+from ulauncher.api.shared.action.RenderResultListAction import \
+    RenderResultListAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
 from todoistext.ProjectList import ProjectList
@@ -23,10 +25,10 @@ class ItemEnterEventListener(EventListener):
             extension.create_task(data["query"])
 
         if data['action'] == "today":
-            return RenderResultListAction(TodayTaskList(extension).get_list())
+            return RenderResultListAction(TodayTaskList(extension).get_rendered_list())
 
         if data['action'] == "projects":
-            return RenderResultListAction(ProjectList(extension).get_list())
+            return RenderResultListAction(ProjectList(extension).get_rendered_list())
 
         return self.get_action_to_render(name="Incorrect request",
                                          description="todo create my task")

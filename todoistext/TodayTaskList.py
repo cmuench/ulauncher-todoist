@@ -13,7 +13,7 @@ class TodayTaskList(object):
     def __init__(self, extension):
         self.extension = extension
 
-    def get_list(self):
+    def get_rendered_list(self):
         api_token = self.extension.api_token
         api = todoist.TodoistAPI(api_token)
         api.sync()
