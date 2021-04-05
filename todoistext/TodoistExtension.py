@@ -42,11 +42,11 @@ class TodoistExtension(Extension):
         self.subscribe(PreferencesEvent, PreferencesEventListener())
         self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
 
-    def create_task(self, message):
+    def create_task(self, task, project_id = None):
         api = todoist.TodoistAPI(self.api_token)
-        new_item = api.quick.add(message)
+        new_item = api.add_item(task, project_id = project_id)
         api.commit()
-        self.show_notification('Task %i created' % new_item["id"], make_sound=True)
+        self.show_notification(f"Task {new_item['id']} created", make_sound=True)
 
     def get_icon(self):
         return self.ICON_FILE

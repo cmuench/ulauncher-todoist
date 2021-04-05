@@ -37,14 +37,16 @@ class KeywordQueryEventListener(EventListener):
             # get the projects which fit the input
             all_projects = ProjectList(extension).get_list()
             filtered_projects = [p for p in all_projects if str(project).lower() in str(p["name"]).lower()]
-            # TODO: HANDLE PROJECT NAMES WITH WHITESPACES
+
             # TODO: CACHE PROJECTS
             return RenderResultListAction([ExtensionResultItem(
                         icon=extension.get_icon(),
                         name=p["name"],
                         description="Do you want to add the task to this project?",
                         highlightable=False,
-                        on_enter=SetUserQueryAction(f"{extension.keyword} create {task} #\"{p['name']}\"")
+                        on_enter=ExtensionCustomAction(
+                            {"action": "create", "task": task, "project_id": p["id"]}, 
+                            keep_app_open=False)
             ) for p in filtered_projects])
         
         task_without_project = re.findall(r"^create\s(.*)?$", query, re.IGNORECASE)
@@ -57,5 +59,8 @@ class KeywordQueryEventListener(EventListener):
                     name=f"Create task {task}",
                     description="Create a new task",
                     highlightable=False,
-                    on_enter=ExtensionCustomAction({"action": "create", "query": task}, keep_app_open=False))
+                    on_enter=ExtensionCustomAction(
+                        {"action": "create", "task": task, "project_id": None}, 
+                        keep_app_open=False)
+                )
             ])
