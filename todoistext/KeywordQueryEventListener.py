@@ -17,6 +17,8 @@ logger = logging.getLogger(__name__)
 class KeywordQueryEventListener(EventListener):
     """ Handles Keyboard input """
 
+    cached_projects = []
+
     def __init__(self, icon_file):
         self.icon_file = icon_file
 
@@ -34,11 +36,14 @@ class KeywordQueryEventListener(EventListener):
             project = task_with_project[0][1]
             logger.debug(project)
 
-            # get the projects which fit the input
-            all_projects = ProjectList(extension).get_list()
-            filtered_projects = [p for p in all_projects if str(project).lower() in str(p["name"]).lower()]
+            # use cache to get the projects for quicker access
+            filtered_projects = [p for p in self.cached_projects if str(project).lower() in str(p["name"]).lower()]
+            # renew cache if no result was found -> maybe the cache data is outdated
+            if not filtered_projects:
+                self.cached_projects = ProjectList(extension).get_list()
 
-            # TODO: CACHE PROJECTS
+            filtered_projects = [p for p in self.cached_projects if str(project).lower() in str(p["name"]).lower()]
+
             return RenderResultListAction([ExtensionResultItem(
                         icon=extension.get_icon(),
                         name=p["name"],
