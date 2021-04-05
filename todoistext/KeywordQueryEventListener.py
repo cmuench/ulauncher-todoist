@@ -28,6 +28,15 @@ class KeywordQueryEventListener(EventListener):
         if not query:
             return extension.show_menu()
 
+        if query == "create":
+            return RenderResultListAction([
+                ExtensionResultItem(
+                    icon=extension.get_icon(),
+                    name="Create task",
+                    description="Start typing to create a task",
+                )
+            ])
+
         logger.debug(query)
 
         task_with_project = re.findall(r"^create\s(.*)?\s#(\S*)?$", query, re.IGNORECASE)
