@@ -43,8 +43,6 @@ class TodoistExtension(Extension):
         self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
 
     def create_task(self, content, project_id = None):
-        print(content)
-        print(project_id)
         api = TodoistAPI(self.api_token)
         if project_id is not None:
             task = api.add_task(content, project_id=int(project_id))
