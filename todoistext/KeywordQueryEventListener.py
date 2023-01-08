@@ -46,12 +46,12 @@ class KeywordQueryEventListener(EventListener):
             logger.debug(project)
 
             # use cache to get the projects for quicker access
-            filtered_projects = [p for p in self.cached_projects if str(project).lower() in str(p["name"]).lower()]
+            filtered_projects = [p for p in self.cached_projects if str(project).lower() in str(p.name).lower()]
             # renew cache if no result was found -> maybe the cache data is outdated
             if not filtered_projects:
                 self.cached_projects = ProjectList(extension).get_list()
 
-            filtered_projects = [p for p in self.cached_projects if str(project).lower() in str(p["name"]).lower()]
+            filtered_projects = [p for p in self.cached_projects if str(project).lower() in str(p.name).lower()]
 
             return RenderResultListAction([ExtensionResultItem(
                         icon=extension.get_icon(),
@@ -59,10 +59,10 @@ class KeywordQueryEventListener(EventListener):
                         description="Do you want to add the task to this project?",
                         highlightable=False,
                         on_enter=ExtensionCustomAction(
-                            {"action": "create", "task": task, "project_id": p["id"]}, 
+                            {"action": "create", "task": task, "project_id": p["id"]},
                             keep_app_open=False)
             ) for p in filtered_projects])
-        
+
         task_without_project = re.findall(r"^create\s(.*)?$", query, re.IGNORECASE)
         if task_without_project:
             task = task_without_project[0]
@@ -74,7 +74,7 @@ class KeywordQueryEventListener(EventListener):
                     description="Create a new task",
                     highlightable=False,
                     on_enter=ExtensionCustomAction(
-                        {"action": "create", "task": task, "project_id": None}, 
+                        {"action": "create", "task": task, "project_id": None},
                         keep_app_open=False)
                 )
             ])
