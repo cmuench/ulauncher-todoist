@@ -22,7 +22,7 @@ class ItemEnterEventListener(EventListener):
         logger.debug(data)
 
         if data['action'] == "create":
-            extension.create_task(data["task"], data["project_id"])
+            extension.create_task(data["content"], data["project_id"])
 
         if data['action'] == "today":
             return RenderResultListAction(TodayTaskList(extension).get_rendered_list())

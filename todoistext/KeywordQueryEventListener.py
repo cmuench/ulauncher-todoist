@@ -55,11 +55,11 @@ class KeywordQueryEventListener(EventListener):
 
             return RenderResultListAction([ExtensionResultItem(
                         icon=extension.get_icon(),
-                        name=p["name"],
+                        name=p.name,
                         description="Do you want to add the task to this project?",
                         highlightable=False,
                         on_enter=ExtensionCustomAction(
-                            {"action": "create", "task": task, "project_id": p["id"]},
+                            {"action": "create", "content": task, "project_id": p.id},
                             keep_app_open=False)
             ) for p in filtered_projects])
 
@@ -74,7 +74,7 @@ class KeywordQueryEventListener(EventListener):
                     description="Create a new task",
                     highlightable=False,
                     on_enter=ExtensionCustomAction(
-                        {"action": "create", "task": task, "project_id": None},
+                        {"action": "create", "content": task, "project_id": None},
                         keep_app_open=False)
                 )
             ])
