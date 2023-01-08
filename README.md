@@ -56,6 +56,6 @@ Contributions, issues and Features requests are welcome.
 
 ## License
 
-Copyright @ 2019 [Christian Münch](https://github.com/cmuench)
+Copyright @ 2023 [Christian Münch](https://github.com/cmuench)
 
 This project is [MIT](LICENSE) Licensed.
