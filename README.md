@@ -1,6 +1,6 @@
 # ulauncher-todoist-ext
 
-![Maintenance Badge](https://img.shields.io/maintenance/yes/2021.svg)
+![Maintenance Badge](https://img.shields.io/maintenance/yes/2023.svg)
 
 > Manage Todoist from Ulauncher.
 
@@ -37,7 +37,7 @@ You can find your API Token here: [https://todoist.com/prefs/integrations](https
 
 ## Usage
 
-On Ulauncher, use "todo" as the default keyword to trigger the extension. By default it will show a list of running containers.
+On Ulauncher, use "todo" as the default keyword to trigger the extension. By default, it will show a list of running containers.
 
 ## Development
 
