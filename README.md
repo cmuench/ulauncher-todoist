@@ -19,7 +19,7 @@
 - [Ulauncher 5](https://ulauncher.io)
 - [Python](https://www.python.org) >= 3
 
-This extension also needs the [todoist-python](https://github.com/Doist/todoist-python) pacakge.
+This extension also needs the [todoist-api-python](https://github.com/Doist/todoist-api-python) package.
 
 You can install them in one command using: `pip3 install todoist-api-python`
 
