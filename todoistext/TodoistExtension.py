@@ -3,7 +3,7 @@ import os
 import subprocess
 
 import gi
-import todoist
+from todoist_api_python.api import TodoistAPI
 from ulauncher.api.shared.action.ExtensionCustomAction import \
     ExtensionCustomAction
 from ulauncher.api.shared.action.RenderResultListAction import \
@@ -43,10 +43,9 @@ class TodoistExtension(Extension):
         self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
 
     def create_task(self, task, project_id = None):
-        api = todoist.TodoistAPI(self.api_token)
-        new_item = api.add_item(task, project_id = project_id)
-        api.commit()
-        self.show_notification(f"Task {new_item['id']} created", make_sound=True)
+        api = TodoistAPI(self.api_token)
+        new_item = api.add_task(task, project_id = project_id)
+        self.show_notification(f"Task {new_item.id} created", make_sound=True)
 
     def get_icon(self):
         return self.ICON_FILE

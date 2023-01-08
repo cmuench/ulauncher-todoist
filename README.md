@@ -21,7 +21,7 @@
 
 This extension also needs the [todoist-python](https://github.com/Doist/todoist-python) pacakge.
 
-You can install them in one command using: `pip3 install todoist-python`
+You can install them in one command using: `pip3 install todoist-api-python`
 
 ## Install
 

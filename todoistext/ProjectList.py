@@ -1,8 +1,6 @@
 import logging
-import unicodedata
-from datetime import datetime
 
-import todoist
+from todoist_api_python.api import TodoistAPI
 from ulauncher.api.shared.action.OpenUrlAction import OpenUrlAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
@@ -16,10 +14,9 @@ class ProjectList(object):
 
     def get_list(self):
         api_token = self.extension.api_token
-        api = todoist.TodoistAPI(api_token)
-        api.sync()
+        api = TodoistAPI(api_token)
 
-        return api.projects.all(filt=self.filter_projects)
+        return api.get_projects()
 
     def get_rendered_list(self):
         projects = self.get_list()
@@ -28,11 +25,11 @@ class ProjectList(object):
         for project in projects:
             rendered_projects.append(
                 ExtensionResultItem(icon="images/projects.png",
-                                    name=self.deEmojify(str(project["name"])),
-                                    on_enter=OpenUrlAction("https://todoist.com/app?#project/%s" % project["id"])))
+                                    name=self.deEmojify(str(project.name)),
+                                    on_enter=OpenUrlAction("https://todoist.com/app?#project/%s" % project.id)))
 
         return rendered_projects
-    
+
 
     def filter_projects(self, project):
         if project["is_deleted"] == 1:
