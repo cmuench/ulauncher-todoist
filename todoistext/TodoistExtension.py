@@ -1,8 +1,10 @@
 import logging
 import os
 import subprocess
+from uuid import uuid4
 
 import gi
+import requests
 from todoist_api_python.api import TodoistAPI
 from ulauncher.api.shared.action.ExtensionCustomAction import \
     ExtensionCustomAction
@@ -44,10 +46,10 @@ class TodoistExtension(Extension):
 
     def create_task(self, content, project_id = None):
         api = TodoistAPI(self.api_token)
-        if project_id is not None:
-            task = api.add_task(content, project_id=int(project_id))
-        else:
-            task = api.add_task(content)
+        result = api.quick_add_task(content)
+        task = result.task
+        if project_id is not None and task.id != "":
+            self.move_task(task_id=task.id, project_id=project_id)
         self.show_notification(f"Task {task.id} created", make_sound=True)
 
     def get_icon(self):
@@ -65,6 +67,26 @@ class TodoistExtension(Extension):
         Notify.Notification.new("Created Todoist Task", message, self.icon_path).show()
         if make_sound:
             subprocess.call(("paplay", self.SOUND_FILE))
+
+    def move_task(self, task_id: str, project_id: str) -> bool:
+        """
+        https://github.com/Doist/todoist-api-python/issues/8#issuecomment-1344860782
+        """
+        body = {
+            "commands": [
+                {
+                    "type": "item_move",
+                    "args": {"id": task_id, "project_id": project_id},
+                    "uuid": uuid4().hex,
+                },
+            ],
+        }
+        response = requests.post(
+            "https://api.todoist.com/sync/v9/sync",
+            headers={"Authorization": f"Bearer {self.api_token}"},
+            json=body,
+        )
+        return response.ok
 
     def show_menu(self):
         keyword = self.keyword
