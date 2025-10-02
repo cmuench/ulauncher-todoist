@@ -1,6 +1,6 @@
 # ulauncher-todoist-ext
 
-![Maintenance Badge](https://img.shields.io/maintenance/yes/2023.svg)
+![Maintenance Badge](https://img.shields.io/maintenance/yes/2025.svg)
 
 > Manage Todoist from Ulauncher.
 
