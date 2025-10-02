@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+from typing import Any
 from uuid import uuid4
 
 import gi
@@ -44,13 +45,17 @@ class TodoistExtension(Extension):
         self.subscribe(PreferencesEvent, PreferencesEventListener())
         self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
 
-    def create_task(self, content, project_id = None):
+    def create_task(self, content, project_id=None):
         api = TodoistAPI(self.api_token)
-        result = api.quick_add_task(content)
-        task = result.task
-        if project_id is not None and task.id != "":
-            self.move_task(task_id=task.id, project_id=project_id)
-        self.show_notification(f"Task {task.id} created", make_sound=True)
+        result = self._quick_add_task(api, content)
+        task = self._extract_task(result)
+
+        task_id = getattr(task, "id", None)
+        if project_id is not None and task_id:
+            self.move_task(task_id=task_id, project_id=project_id)
+
+        display_id = task_id or getattr(task, "uuid", None) or ""
+        self.show_notification(f"Task {display_id} created", make_sound=True)
 
     def get_icon(self):
         return self.ICON_FILE
@@ -87,6 +92,34 @@ class TodoistExtension(Extension):
             json=body,
         )
         return response.ok
+
+    def _extract_task(self, task_result: Any) -> Any:
+        """Normalize quick_add_task responses across todoist-api-python versions."""
+        if hasattr(task_result, "task"):
+            return task_result.task
+
+        if isinstance(task_result, dict):
+            return task_result
+
+        if isinstance(task_result, (list, tuple)) and task_result:
+            return task_result[0]
+
+        return task_result
+
+    def _quick_add_task(self, api: TodoistAPI, content: str) -> Any:
+        if hasattr(api, "add_task_quick"):
+            try:
+                return api.add_task_quick(content)
+            except TypeError:
+                logger.debug("Todoist API add_task_quick signature mismatch, falling back", exc_info=True)
+
+        if hasattr(api, "quick_add_task"):
+            try:
+                return api.quick_add_task(content)
+            except TypeError:
+                logger.debug("Todoist API quick_add_task signature mismatch, falling back", exc_info=True)
+
+        return api.add_task(content)
 
     def show_menu(self):
         keyword = self.keyword
