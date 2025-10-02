@@ -1,7 +1,10 @@
 EXT_NAME:=com.github.cmuench-ulauncher-todoist
 EXT_DIR:=$(shell pwd)
+PYTHON?=python3
+PYTHON_SITE:=$(shell $(PYTHON) -c 'import sysconfig; print(sysconfig.get_paths()["platlib"])')
 
-.PHONY: help lint format link unlink deps dev
+
+.PHONY: help lint format link unlink deps ulauncher-dev dev-extension
 .DEFAULT_TARGET: help
 
 help: ## Show help menu
@@ -22,5 +25,8 @@ unlink: ## Unlink extension from Ulauncher
 deps: ## Install Python Dependencies
 	@sudo pip3 install -r requirements.txt
 
-dev: ## Runs ulauncher on development mode
+ulauncher-dev: ## Start Ulauncher in dev mode (no extensions loaded)
 	ulauncher --no-extensions --dev -v
+
+dev-extension: ## Attach the extension to a running `make ulauncher-dev`
+	VERBOSE=1 ULAUNCHER_WS_API=ws://127.0.0.1:5054/${EXT_NAME} PYTHONPATH=${PYTHON_SITE}:${EXT_DIR} ${PYTHON} ${EXT_DIR}/main.py

@@ -54,9 +54,11 @@ The `make help` target lists all available developer commands, including:
 - `make lint` — Run Pylint on every Python file to catch style and logic issues.
 - `make format` — Apply yapf formatting recursively; run before committing to match the project style.
 - `make deps` — Install Python dependencies from `requirements.txt` (may require sudo on Linux).
-- `make dev` — Launch Ulauncher in development mode without other extensions for faster iteration.
+- `make ulauncher-dev` — Launch Ulauncher in development mode without auto-loading extensions.
+- `make dev-extension` — Attach this extension to the dev websocket that `make ulauncher-dev` exposes.
 
-After linking, restart Ulauncher from the command line with `ulauncher --no-extensions --dev -v` to observe logs while testing the extension.
+After linking, restart Ulauncher from the command line with `make ulauncher-dev` to observe logs while testing the extension.
+Because `make ulauncher-dev` uses the `--no-extensions` flag, Ulauncher starts without auto-loading this extension. In another terminal, run `make dev-extension` from the repository root to connect the Todoist extension to the dev websocket with the correct environment variables.
 
 ## Contributing
 
@@ -64,6 +66,6 @@ Contributions, issues and Features requests are welcome.
 
 ## License
 
-Copyright @ 2023 [Christian Münch](https://github.com/cmuench)
+Copyright [Christian Münch](https://github.com/cmuench)
 
 This project is [MIT](LICENSE) Licensed.
