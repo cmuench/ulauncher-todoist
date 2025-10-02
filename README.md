@@ -43,12 +43,20 @@ On Ulauncher, use "todo" as the default keyword to trigger the extension. By def
 
 ```
 git clone https://github.com/cmuench/ulauncher-todoist
-make link
+cd ulauncher-todoist
+make help
 ```
 
-The `make link` command will symlink the cloned repo into the appropriate location on the ulauncher extensions folder.
+The `make help` target lists all available developer commands, including:
 
-To see your changes, stop ulauncher and run it from the command line with: `ulauncher -v`.
+- `make link` — Symlink the repository into the local Ulauncher extensions directory so changes load immediately.
+- `make unlink` — Remove the symlink when you are done testing locally.
+- `make lint` — Run Pylint on every Python file to catch style and logic issues.
+- `make format` — Apply yapf formatting recursively; run before committing to match the project style.
+- `make deps` — Install Python dependencies from `requirements.txt` (may require sudo on Linux).
+- `make dev` — Launch Ulauncher in development mode without other extensions for faster iteration.
+
+After linking, restart Ulauncher from the command line with `ulauncher --no-extensions --dev -v` to observe logs while testing the extension.
 
 ## Contributing
 
